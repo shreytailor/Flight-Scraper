@@ -32,4 +32,9 @@ pip install selenium
 
   For Macintosh, there is a different process because we have to add the driver to the PATH file. For that, use the following [guide](https://www.kenst.com/2015/03/including-the-chromedriver-location-in-macos-system-path/). The same process applied for GeckoDriver too.
 
-3. In order for the email functionality to work properly, we have to authenticate our email account. However, when the application is tested, Google will think someone else is trying to access your account, so first head to this [link](https://myaccount.google.com/security) and enable the 'Less Secure App Access'.
+3. In order for the email functionality to work properly, we have to authenticate our email account by creating a configuration file called 'config.py' which has the following details.
+  ```python
+  EMAIL_ADDRESS = 'your email';
+  PASSWORD = 'your password';
+  ```
+  However, when the application is tested, Google will think someone else is trying to access your account, so first head to this [link](https://myaccount.google.com/security) and enable the 'Less Secure App Access'.

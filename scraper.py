@@ -1,4 +1,3 @@
-# Initializing the variables which we will need for collecting the information. Also we are creating a Class, in which we can store information about each individual flights.
 cheapestFlightsArray = [];
 bestFlightsArray = [];
 quickestFlightsArray = [];
@@ -21,15 +20,11 @@ class Flight:
         self.totalComingJourney = totalComingJourney;
 
 
-
-# The function below closes the modal which pops-up after the redirection of the website within the browser.
 def closeModal(delaySeconds):
     time.sleep(delaySeconds);
 
-    # Getting a list of the close buttons that meet the XPath requirements.
     closeButtons = driver.find_elements_by_xpath('//button[contains(@id, "dialog-close") and contains (@class, "Button-No-Standard-Style close ")]');
 
-    # Going through a few of the last buttons and clicking them to ensure that the modal is closed. If there is an error, it is ignored and we move onto the next button. This is done because we don't know the order of the buttons as they keep changing so we trying clicking on the last few within the list.
     try:
         closeButtons[7].click();
     except:
@@ -52,12 +47,10 @@ def closeModal(delaySeconds):
 
 
 
-# The function below loads more results on our page.
 def loadMore(delaySeconds):
     print('Loading more results...');
     time.sleep(delaySeconds);
 
-    # We are removing the "Back To Top" div here which shows up due to scrolling down. The 'try and except' is used here because on the first attempt, the div may not be there so in this case, the error is ignored.
     try:
         backToTop = driver.find_element_by_xpath('//div[contains(@id, "backToTop") and contains(@class, "backToTop visible")]');
         driver.execute_script("""var element = arguments[0];element.parentNode.removeChild(element);""", backToTop);
@@ -75,7 +68,6 @@ def loadMore(delaySeconds):
 
 
 
-# The function below actually does the scraping from the website, by finding the different elements on the browser. We go through each card for different flights and then append that to main array by creating class instances for each flight option for the user.
 def collectResults(selectedArray):
     flights = driver.find_elements_by_class_name('resultInner');
     for flight in flights:
@@ -109,19 +101,15 @@ def collectResults(selectedArray):
 
 
 
-# The function below goes through the three arrays which were created initially for storing all the results, and takes the top five results from each and then puts the content of that in the email so that the user gets a summary.
 def sendEmail(emailTo):
-    # Over here, we are setting up the login for the host account so that we can send emails.
     server = smtplib.SMTP('smtp.gmail.com', 587);
     server.ehlo();
     server.starttls();
     server.login(config.EMAIL_ADDRESS, config.PASSWORD);
 
-    # The two important strings are created.
     subject = 'Updated Ticket Prices';
     bodyMessage = 'The scrape for KAYAK has just been performed. Here are the updated ticket prices for {}-{}, from {} to {}\n\n\n\n\n'.format(origin, destination, startDate, endDate);
 
-    # Going through the data in the three arrays using FOR loops (through the first five results).
     bodyMessage += 'Results sorted by Price (low to high) -\n'
     bodyMessage += '_______________________________________\n\n';
     for counter in range(5):
@@ -225,15 +213,13 @@ def sendEmail(emailTo):
 
 
 
-# The 'selenium.webdriver' is a module which brings real user interactions with a simulated browser. It is an interface which takes in a set of instructions, and we are able to run those on many different browsers.
 from selenium import webdriver;
-# This default Python module is required to add some delay between the commands.
 import time;
-# The module below is needed to send an email from Python, and we must also import the 'config' file to import the login credentials for your email account.
 import smtplib;
 import config;
+from functions import closeModal, loadMore, collectResults, sendEmail
 
-# Asking the end-user for the travel information.
+
 print('---------------------------------------------------');
 origin = input('Origin: ');
 destination = input('Destination: ');
@@ -243,15 +229,12 @@ startDate = input('Leaving on: ');
 endDate = input('Coming back on: ');
 print('---------------------------------------------------');
 
-# The 'GeckoDriver' which is developed by Mozilla has been placed within '/usr/local/bin' and is added to the PATHS so that it can be accessed from here. It is a linkage between the Selenium module and Firefox.
 driver = webdriver.Firefox();
 
-# We are constructing the Kayak links, from the input of the user from above.
 cheapestSortURL = 'https://www.nz.kayak.com/flights/' + origin + '-' + destination + '/' + startDate + '-flexible/' + endDate +'-flexible?sort=price_a';
 bestSortURL = 'https://www.nz.kayak.com/flights/' + origin + '-' + destination + '/' + startDate + '-flexible/' + endDate +'-flexible?sort=bestflight_a';
 quickestSortURL = 'https://www.nz.kayak.com/flights/' + origin + '-' + destination + '/' + startDate + '-flexible/' + endDate +'-flexible?sort=duration_a';
 
-# Redirecting the browser to the link created above. We are scraping the results off the website for all the types of sorts.
 driver.get(cheapestSortURL);
 closeModal(5);
 collectResults(cheapestFlightsArray);

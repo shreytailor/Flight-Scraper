@@ -213,11 +213,11 @@ def sendEmail(emailTo):
 
 
 
-from selenium import webdriver;
 import time;
 import smtplib;
 import config;
-from functions import closeModal, loadMore, collectResults, sendEmail
+from selenium import webdriver;
+from selenium.webdriver.firefox.options import Options;
 
 
 print('---------------------------------------------------');
@@ -229,7 +229,13 @@ startDate = input('Leaving on: ');
 endDate = input('Coming back on: ');
 print('---------------------------------------------------');
 
-driver = webdriver.Firefox();
+headless = True;
+if headless:
+    options = Options();
+    options.headless = True;
+    driver = webdriver.Firefox(options = options);
+else:
+    driver = webdriver.Firefox();
 
 cheapestSortURL = 'https://www.nz.kayak.com/flights/' + origin + '-' + destination + '/' + startDate + '-flexible/' + endDate +'-flexible?sort=price_a';
 bestSortURL = 'https://www.nz.kayak.com/flights/' + origin + '-' + destination + '/' + startDate + '-flexible/' + endDate +'-flexible?sort=bestflight_a';
@@ -247,5 +253,5 @@ driver.get(quickestSortURL);
 closeModal(5);
 collectResults(quickestFlightsArray);
 
-sendEmail("Recipient's Email");
+sendEmail("shreym.tailor@gmail.com");
 driver.quit();

@@ -24,7 +24,6 @@ class Flight:
 
 # The function below closes the modal which pops-up after the redirection of the website within the browser.
 def closeModal(delaySeconds):
-    print('Waiting for the modal to load properly...');
     time.sleep(delaySeconds);
 
     # Getting a list of the close buttons that meet the XPath requirements.
@@ -50,9 +49,6 @@ def closeModal(delaySeconds):
         closeButtons[10].click();
     except:
         pass;
-
-    print('The modal is closed!');
-    print('---------------------------------------------------');
 
 
 
@@ -123,11 +119,11 @@ def sendEmail(emailTo):
 
     # The two important strings are created.
     subject = 'Updated Ticket Prices';
-    bodyMessage = 'The scrape for KAYAK has just been performed and here are the updated ticket prices.\n\n\n\n\n';
+    bodyMessage = 'The scrape for KAYAK has just been performed. Here are the updated ticket prices for {}-{}, from {} to {}\n\n\n\n\n'.format(origin, destination, startDate, endDate);
 
     # Going through the data in the three arrays using FOR loops (through the first five results).
-    bodyMessage += 'Here are the results sorted by Price (low to high) -'
-    bodyMessage += '____________________________________________________________________________________\n\n';
+    bodyMessage += 'Results sorted by Price (low to high) -\n'
+    bodyMessage += '_______________________________________\n\n';
     for counter in range(5):
         object = cheapestFlightsArray[counter];
         provider = object.provider;
@@ -156,8 +152,8 @@ def sendEmail(emailTo):
         bodyMessage += '(The service is provided by {})\n\n\n'.format(comingAirline);
     bodyMessage += '\n\n\n';
 
-    bodyMessage += 'Here are the results sorted by Best first -'
-    bodyMessage += '____________________________________________________________________________________\n\n';
+    bodyMessage += 'Results sorted by Best first -\n'
+    bodyMessage += '______________________________\n\n';
     for counter in range(5):
         object = bestFlightsArray[counter];
         provider = object.provider;
@@ -186,8 +182,8 @@ def sendEmail(emailTo):
         bodyMessage += '(The service is provided by {})\n\n\n'.format(comingAirline);
     bodyMessage += '\n\n\n';
 
-    bodyMessage += 'Here are the results sorted by Journey Time (low to high) -'
-    bodyMessage += '____________________________________________________________________________________\n\n';
+    bodyMessage += 'Results sorted by Journey Time (low to high) -\n'
+    bodyMessage += '______________________________________________\n\n';
     for counter in range(5):
         object = quickestFlightsArray[counter];
         provider = object.provider;
@@ -219,6 +215,7 @@ def sendEmail(emailTo):
     message = 'Subject: {}\n\n{}'.format(subject, bodyMessage);
     server.sendmail(config.EMAIL_ADDRESS, emailTo, message);
     server.quit();
+    print('The summary of the results is sent through email.');
 
 
 
@@ -257,18 +254,15 @@ quickestSortURL = 'https://www.nz.kayak.com/flights/' + origin + '-' + destinati
 # Redirecting the browser to the link created above. We are scraping the results off the website for all the types of sorts.
 driver.get(cheapestSortURL);
 closeModal(5);
-loadMore(3);
 collectResults(cheapestFlightsArray);
 
 driver.get(bestSortURL);
 closeModal(5);
-loadMore(3);
 collectResults(bestFlightsArray);
 
 driver.get(quickestSortURL);
 closeModal(5);
-loadMore(3);
 collectResults(quickestFlightsArray);
 
-sendEmail('shreym.tailor@gmail.com');
+sendEmail("Recipient's Email");
 driver.quit();

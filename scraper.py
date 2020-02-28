@@ -23,6 +23,38 @@ class Flight:
 
 
 
+# The function below creates a block for the summary of the current flight. This is to be used in the email.
+def createSummaryBlock(flightObject):
+    currentBlock = '';
+    provider = flightObject.provider;
+    price = flightObject.price;
+    goingDate = flightObject.goingDate;
+    goingStartTime = flightObject.goingStartTime;
+    goingEndTime = flightObject.goingEndTime;
+    goingAirline = flightObject.goingAirline;
+    goingNoOfLayovers = flightObject.goingNoOfLayovers;
+    totalGoingJourney = flightObject.totalGoingJourney;
+    comingDate = flightObject.comingDate;
+    comingStartTime = flightObject.comingStartTime;
+    comingEndTime = flightObject.comingEndTime;
+    comingAirline = flightObject.comingAirline;
+    comingNoOfLayovers = flightObject.comingNoOfLayovers;
+    totalComingJourney = flightObject.totalComingJourney;
+
+    currentBlock += '{}, {}\n'.format(provider, price);
+    currentBlock += '-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n';
+    currentBlock += '{} ~ {} - {}\n'.format(goingDate, goingStartTime, goingEndTime);
+    currentBlock += '{}, the total journey time is {}\n'.format(goingNoOfLayovers, totalGoingJourney);
+    currentBlock += '(The service is provided by {})\n'.format(goingAirline);
+    currentBlock += '-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n';
+    currentBlock += '{} ~ {} - {}\n'.format(comingDate, comingStartTime, comingEndTime);
+    currentBlock += '{}, the total journey time is {}\n'.format(comingNoOfLayovers, totalComingJourney);
+    currentBlock += '(The service is provided by {})\n\n\n'.format(comingAirline);
+    currentBlock += '\n\n\n';
+    return currentBlock;
+
+
+
 # The function below takes in a single argument, which is the delay time before the process of closing the modal actually begins. This delay is added to make sure the modal has actually fully loaded - because there would be an error otherwise.
 def closeModal(delaySeconds):
     time.sleep(delaySeconds);
@@ -131,91 +163,19 @@ def sendEmail(emailTo):
     bodyMessage += '_______________________________________\n\n';
     for counter in range(5):
         object = cheapestFlightsArray[counter];
-        provider = object.provider;
-        price = object.price;
-        goingDate = object.goingDate;
-        goingStartTime = object.goingStartTime;
-        goingEndTime = object.goingEndTime;
-        goingAirline = object.goingAirline;
-        goingNoOfLayovers = object.goingNoOfLayovers;
-        totalGoingJourney = object.totalGoingJourney;
-        comingDate = object.comingDate;
-        comingStartTime = object.comingStartTime;
-        comingEndTime = object.comingEndTime;
-        comingAirline = object.comingAirline;
-        comingNoOfLayovers = object.comingNoOfLayovers;
-        totalComingJourney = object.totalComingJourney;
-
-        bodyMessage += '{}, {}\n'.format(provider, price);
-        bodyMessage += '-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n';
-        bodyMessage += '{} ~ {} - {}\n'.format(goingDate, goingStartTime, goingEndTime);
-        bodyMessage += '{}, the total journey time is {}\n'.format(goingNoOfLayovers, totalGoingJourney);
-        bodyMessage += '(The service is provided by {})\n'.format(goingAirline);
-        bodyMessage += '-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n';
-        bodyMessage += '{} ~ {} - {}\n'.format(comingDate, comingStartTime, comingEndTime);
-        bodyMessage += '{}, the total journey time is {}\n'.format(comingNoOfLayovers, totalComingJourney);
-        bodyMessage += '(The service is provided by {})\n\n\n'.format(comingAirline);
-    bodyMessage += '\n\n\n';
+        bodyMessage += createSummaryBlock(object);
 
     bodyMessage += 'Results sorted by Best first -\n'
     bodyMessage += '______________________________\n\n';
     for counter in range(5):
         object = bestFlightsArray[counter];
-        provider = object.provider;
-        price = object.price;
-        goingDate = object.goingDate;
-        goingStartTime = object.goingStartTime;
-        goingEndTime = object.goingEndTime;
-        goingAirline = object.goingAirline;
-        goingNoOfLayovers = object.goingNoOfLayovers;
-        totalGoingJourney = object.totalGoingJourney;
-        comingDate = object.comingDate;
-        comingStartTime = object.comingStartTime;
-        comingEndTime = object.comingEndTime;
-        comingAirline = object.comingAirline;
-        comingNoOfLayovers = object.comingNoOfLayovers;
-        totalComingJourney = object.totalComingJourney;
-
-        bodyMessage += '{}, {}\n'.format(provider, price);
-        bodyMessage += '-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n';
-        bodyMessage += '{} ~ {} - {}\n'.format(goingDate, goingStartTime, goingEndTime);
-        bodyMessage += '{}, the total journey time is {}\n'.format(goingNoOfLayovers, totalGoingJourney);
-        bodyMessage += '(The service is provided by {})\n'.format(goingAirline);
-        bodyMessage += '-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n';
-        bodyMessage += '{} ~ {} - {}\n'.format(comingDate, comingStartTime, comingEndTime);
-        bodyMessage += '{}, the total journey time is {}\n'.format(comingNoOfLayovers, totalComingJourney);
-        bodyMessage += '(The service is provided by {})\n\n\n'.format(comingAirline);
-    bodyMessage += '\n\n\n';
+        bodyMessage += createSummaryBlock(object);
 
     bodyMessage += 'Results sorted by Journey Time (low to high) -\n'
     bodyMessage += '______________________________________________\n\n';
     for counter in range(5):
         object = quickestFlightsArray[counter];
-        provider = object.provider;
-        price = object.price;
-        goingDate = object.goingDate;
-        goingStartTime = object.goingStartTime;
-        goingEndTime = object.goingEndTime;
-        goingAirline = object.goingAirline;
-        goingNoOfLayovers = object.goingNoOfLayovers;
-        totalGoingJourney = object.totalGoingJourney;
-        comingDate = object.comingDate;
-        comingStartTime = object.comingStartTime;
-        comingEndTime = object.comingEndTime;
-        comingAirline = object.comingAirline;
-        comingNoOfLayovers = object.comingNoOfLayovers;
-        totalComingJourney = object.totalComingJourney;
-
-        bodyMessage += '{}, {}\n'.format(provider, price);
-        bodyMessage += '-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n';
-        bodyMessage += '{} ~ {} - {}\n'.format(goingDate, goingStartTime, goingEndTime);
-        bodyMessage += '{}, the total journey time is {}\n'.format(goingNoOfLayovers, totalGoingJourney);
-        bodyMessage += '(The service is provided by {})\n'.format(goingAirline);
-        bodyMessage += '-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- \n';
-        bodyMessage += '{} ~ {} - {}\n'.format(comingDate, comingStartTime, comingEndTime);
-        bodyMessage += '{}, the total journey time is {}\n'.format(comingNoOfLayovers, totalComingJourney);
-        bodyMessage += '(The service is provided by {})\n\n\n'.format(comingAirline);
-    bodyMessage += '\n\n\n';
+        bodyMessage += createSummaryBlock(object);
 
     # Finally, we are now sending the email.
     message = 'Subject: {}\n\n{}'.format(subject, bodyMessage);
@@ -252,7 +212,7 @@ endDate = input('Coming back on: ');
 print('---------------------------------------------------');
 
 # Set the 'headless' to true, to hide the browser when it is running.
-headless = False;
+headless = True;
 if headless:
     options = Options();
     options.headless = True;
@@ -267,19 +227,19 @@ quickestSortURL = 'https://www.nz.kayak.com/flights/' + origin + '-' + destinati
 
 # Using the functions above for each kind of sort.
 driver.get(cheapestSortURL);
-closeModal(10);
+closeModal(7);
 collectResults(cheapestFlightsArray);
 
 driver.get(bestSortURL);
-closeModal(10);
+closeModal(7);
 collectResults(bestFlightsArray);
 
 driver.get(quickestSortURL);
-closeModal(10);
+closeModal(7);
 collectResults(quickestFlightsArray);
 
 # After all the collection is done, send them a summary email to finish off.
-sendEmail("email where you want to send the summary");
+sendEmail("shreym.tailor@gmail.com");
 
 # Quit the browser after everything is finished.
 driver.quit();

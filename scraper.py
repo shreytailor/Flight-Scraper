@@ -212,7 +212,7 @@ endDate = input('Coming back on: ');
 print('---------------------------------------------------');
 
 # Set the 'headless' to true, to hide the browser when it is running.
-headless = True;
+headless = False;
 if headless:
     options = Options();
     options.headless = True;
